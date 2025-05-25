@@ -1,6 +1,6 @@
 import { createBrowserRouter,RouterProvider,Route,Link } from "react-router-dom";
 import { createRoot } from "react-dom";
-import NewPlace, { placeFormAction } from "./pages/NewPlace";
+import NewPlace, { fetchPlace, placeFormAction, updatePlaceFormAction } from "./pages/NewPlace";
 import AllPlaces, { deletePlaceAction } from "./pages/AllPlaces";
 import axios from 'axios'
 import ErrorPage from "./pages/ErrorPage";
@@ -36,6 +36,12 @@ function App() {
               path: "/new-place",
               element: <NewPlace />,
               action: placeFormAction,
+            },
+            {
+              path: "/update-place/:pid",
+              element: <NewPlace />,
+              loader:fetchPlace,
+              action: updatePlaceFormAction,
             },
           ],
         },

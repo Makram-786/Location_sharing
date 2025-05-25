@@ -20,6 +20,9 @@ const Header = () => {
             <li>
                {userId && <button onClick={logoutHandler}>Logout</button>}
             </li>
+            <li>
+            <button onClick={()=> navigate('/new-place')}>Add New Place</button>
+            </li>
         </ul>
     </div>
   )

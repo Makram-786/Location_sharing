@@ -1,5 +1,5 @@
 // NewPlace.jsx
-import { Form, useActionData,redirect } from "react-router-dom";
+import { Form, useActionData,redirect,useParams,useLoaderData } from "react-router-dom";
 import axios from "axios";
 
 export async function placeFormAction({ request }) {
@@ -20,8 +20,12 @@ export async function placeFormAction({ request }) {
   }
 }
 
+// Fetch Place For Update
+
 const NewPlace = () => {
+
   const result = useActionData();
+  const place = useLoaderData()
 
   return (
     <Form method="post">
@@ -34,21 +38,49 @@ const NewPlace = () => {
 
       <div className="form-group">
         <label htmlFor="title">Title</label>
-        <input type="text" name="title" id="title" required />
+        <input type="text" name="title" id="title" defaultValue={place?.title || ""} required />
       </div>
       <div className="form-group">
         <label htmlFor="description">Description</label>
-        <textarea name="description" id="description" required></textarea>
+        <textarea name="description" id="description" defaultValue={place?.description || ""} required></textarea>
       </div>
-      <div className="form-group">
+     {!place && <div className="form-group">
         <label htmlFor="address">Address</label>
-        <input type="text" name="address" id="address" required />
-      </div>
+        <input type="text" name="address" id="address"   required />
+      </div>}
       <div className="form-group">
-        <button type="submit">Add Place</button>
+        <button type="submit">{!place ? "Add Place" : "Update Place"}</button>
       </div>
     </Form>
   );
 };
+export const fetchPlace = async({params}) =>{
+  console.log(params,"========================================")
+  try {
+   
+      const res = await axios.get(`http://localhost:5000/api/places/${params.pid}`)
+      console.log(res.data,)
+      return res.data.place
+    }
 
+   catch (error) {
+    throw error
+  }
+}
+
+export async function updatePlaceFormAction({ request,params }) {
+  const formData = await request.formData();
+  const title = formData.get("title");
+  const description = formData.get("description");
+  console.log(params.pid,"===========================Inside Update Action")
+  try {
+    await axios.patch(`http://localhost:5000/api/places/${params.pid}`, {
+      title,
+      description,
+    },{withCredentials:true});
+    return redirect('/')
+  } catch (error) {
+    return { error: "Something went wrong" };
+  }
+}
 export default NewPlace;

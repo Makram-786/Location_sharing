@@ -1,10 +1,11 @@
 import React, { Fragment } from "react";
 import { useEffect } from "react";
-import { useLoaderData,useFetcher } from "react-router-dom";
+import { useLoaderData,useFetcher,useNavigate } from "react-router-dom";
 import axios from "axios";
 const AllPlaces = () => {
   const data = useLoaderData();
   const fetcher = useFetcher();
+  const navigate = useNavigate();
   if (data.places.length === 0) {
     return <h2>No Place Found</h2>;
   }
@@ -13,7 +14,10 @@ const AllPlaces = () => {
   return (
     <div>
       {/* {success && <p style={{color:'green'}}>New Place has been created Successfully</p>} */}
+      <div className="d-flex justify-content-between">
       <h1>All Places</h1>
+        
+      </div>
       {data &&
         data.places.map((place) => {
           return (
@@ -21,7 +25,7 @@ const AllPlaces = () => {
               <li>{place.title}</li>
               <li>{place.description}</li>
               <li>
-                <button onClick={() => editHandler(post._id)}>Edit</button>
+                <button onClick={() => navigate(`/update-place/${place._id}`)}>Edit</button>
               </li>
               <li>
                 <fetcher.Form method="post">
@@ -52,3 +56,4 @@ export async function deletePlaceAction({ request }) {
     return { error: "Failed to delete place" };
   }
 }
+
