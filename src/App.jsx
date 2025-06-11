@@ -24,7 +24,7 @@ function App() {
               loader: async () => {
                 const userId = JSON.parse(localStorage.getItem("userId"));
                 if (!userId) throw new Error("Not logged in");
-                const res = await axios.get(`http://localhost:5000/api/places/user/${userId}`, {
+                const res = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/api/places/user/${userId}`, {
                   withCredentials: true,
                 });
                 return res.data;

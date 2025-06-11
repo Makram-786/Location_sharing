@@ -28,6 +28,7 @@ const NewPlace = () => {
   const place = useLoaderData()
 
   return (
+    <div className="wrapper">
     <Form method="post">
       {result?.success && (
         <div style={{ color: "green" }}>Form submitted successfully</div>
@@ -52,6 +53,7 @@ const NewPlace = () => {
         <button type="submit">{!place ? "Add Place" : "Update Place"}</button>
       </div>
     </Form>
+    </div>
   );
 };
 export const fetchPlace = async({params}) =>{

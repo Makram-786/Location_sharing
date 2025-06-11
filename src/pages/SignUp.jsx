@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form,useFormAction,redirect } from 'react-router-dom'
+import { Form,useFormAction,redirect,Link } from 'react-router-dom'
 import axios from 'axios'
 const SignUp = () => {
     const result = useFormAction()
@@ -8,6 +8,7 @@ const SignUp = () => {
     {result && result.success &&  <p style={{
         color:"green"
     }}>Form submission successfully!</p>}    
+    <div className="wrapper">
     <Form method='post'>
     <div className="form-group">
         <label htmlFor="name">Name</label>
@@ -24,7 +25,14 @@ const SignUp = () => {
     <div className="form-group">
         <button>Register</button>
     </div>
-</Form>
+    <p className='bottom-text'>
+                Already have an account?
+                <Link to={'/login'}>
+                    Login here
+                </Link>
+            </p>
+    </Form>
+    </div>
     </>
   )
 }
