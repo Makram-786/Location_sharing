@@ -15,27 +15,26 @@ const AllPlaces = () => {
     <div>
       {/* {success && <p style={{color:'green'}}>New Place has been created Successfully</p>} */}
       <div className="d-flex justify-content-between">
-      <h1>All Places</h1>
-        
+      <h1 className="place-heading">All <span> Places</span></h1>
       </div>
+      <div className="place-list">
       {data &&
         data.places.map((place) => {
           return (
-            <Fragment key={place._id}>
-              <li>{place.title}</li>
-              <li>{place.description}</li>
-              <li>
-                <button onClick={() => navigate(`/update-place/${place._id}`)}>Edit</button>
-              </li>
-              <li>
+            <div key={place._id} className="place">
+              <h2 className="place-title">{place.title}</h2>
+              <p className="place-description">{place.description}</p>
+              <div className="btn-action">
+                <button className="btn-edit" onClick={() => navigate(`/update-place/${place._id}`)}>Edit</button>
                 <fetcher.Form method="post">
                   <input type="hidden" name="placeId" value={place._id} />
-                  <button type="submit">Delete</button>
+                  <button className="btn-delete" type="submit">Delete</button>
                 </fetcher.Form>
-              </li>
-            </Fragment>
+              </div>
+            </div>
           );
         })}
+      </div>
     </div>
   );
 };

@@ -9,7 +9,7 @@ export async function placeFormAction({ request }) {
   const address = formData.get("address");
 
   try {
-    await axios.post("http://localhost:5000/api/places", {
+    await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/api/places`, {
       title,
       description,
       address,
@@ -57,11 +57,9 @@ const NewPlace = () => {
   );
 };
 export const fetchPlace = async({params}) =>{
-  console.log(params,"========================================")
   try {
    
-      const res = await axios.get(`http://localhost:5000/api/places/${params.pid}`)
-      console.log(res.data,)
+      const res = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/api/places/${params.pid}`)
       return res.data.place
     }
 
@@ -74,9 +72,8 @@ export async function updatePlaceFormAction({ request,params }) {
   const formData = await request.formData();
   const title = formData.get("title");
   const description = formData.get("description");
-  console.log(params.pid,"===========================Inside Update Action")
   try {
-    await axios.patch(`http://localhost:5000/api/places/${params.pid}`, {
+    await axios.patch(`${import.meta.env.VITE_APP_BACKEND_URL}/api/places/${params.pid}`, {
       title,
       description,
     },{withCredentials:true});

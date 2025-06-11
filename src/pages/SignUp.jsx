@@ -40,18 +40,16 @@ const SignUp = () => {
 export default SignUp
 
 export async function signUpFormAction({request}){
-    console.log("Calling Action Handler===================")
     const formData = await request.formData();
     const name = formData.get('name') 
     const email = formData.get('email') 
     const password = formData.get('password')
     try {
-      const res = await axios.post('http://localhost:5000/api/user/register',{
+      const res = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/api/user/register`,{
             name,
              email,
              password
          })
-         console.log(res.data.message)
          redirect('/login')
         
     } catch (error) {

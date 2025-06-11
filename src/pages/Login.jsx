@@ -3,8 +3,6 @@ import { Form,useFormAction,redirect, Link } from 'react-router-dom'
 import axios from 'axios'
 const Login = () => {
     const result = useFormAction()
-    const api_url = import.meta.env.VITE_APP_BACKEND_URL
-    console.log(api_url)
   return (
     <div className='wrapper'>
         <Form method='post'>
