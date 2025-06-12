@@ -1,6 +1,7 @@
 // NewPlace.jsx
 import { Form, useActionData,redirect,useParams,useLoaderData } from "react-router-dom";
 import axios from "axios";
+import Map from "../components/Map";
 
 export async function placeFormAction({ request }) {
   const formData = await request.formData();
@@ -45,10 +46,13 @@ const NewPlace = () => {
         <label htmlFor="description">Description</label>
         <textarea name="description" id="description" defaultValue={place?.description || ""} required></textarea>
       </div>
-     {!place && <div className="form-group">
+       {!place && <div className="form-group">
         <label htmlFor="address">Address</label>
         <input type="text" name="address" id="address"   required />
       </div>}
+       {/* {!place && 
+       <Map/>
+       } */}
       <div className="form-group">
         <button type="submit">{!place ? "Add Place" : "Update Place"}</button>
       </div>

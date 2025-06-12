@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import { useEffect } from "react";
 import { useLoaderData,useFetcher,useNavigate } from "react-router-dom";
 import axios from "axios";
+import Map from "../components/Map";
 const AllPlaces = () => {
   const data = useLoaderData();
   const fetcher = useFetcher();
@@ -22,8 +23,11 @@ const AllPlaces = () => {
         data.places.map((place) => {
           return (
             <div key={place._id} className="place">
+              <Map lat={place.location.lat} lng={place.location.lon} />
               <h2 className="place-title">{place.title}</h2>
               <p className="place-description">{place.description}</p>
+              {/* <p>lat: {place.lat}</p>
+              <p>lng : {place.lon}</p> */}
               <div className="btn-action">
                 <button className="btn-edit" onClick={() => navigate(`/update-place/${place._id}`)}>Edit</button>
                 <fetcher.Form method="post">
@@ -46,7 +50,7 @@ export async function deletePlaceAction({ request }) {
   const placeId = formData.get("placeId");
 
   try {
-    await axios.delete(`http://localhost:5000/api/places/${placeId}`, {
+    await axios.delete(`${import.meta.env.VITE_APP_BACKEND_URL}/api/places/${placeId}`, {
       withCredentials: true,
     });
 
