@@ -1,6 +1,7 @@
 import React from 'react'
 import { Form,useFormAction,redirect,Link } from 'react-router-dom'
 import axios from 'axios'
+import {ToastContainer,toast} from 'react-toastify'
 const SignUp = () => {
     const result = useFormAction()
   return (
@@ -31,6 +32,7 @@ const SignUp = () => {
                     Login here
                 </Link>
             </p>
+            <ToastContainer/>
     </Form>
     </div>
     </>
@@ -50,6 +52,7 @@ export async function signUpFormAction({request}){
              email,
              password
          })
+         toast('You have successfully signed up')
          redirect('/login')
         
     } catch (error) {

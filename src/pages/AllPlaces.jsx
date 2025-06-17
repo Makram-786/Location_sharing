@@ -1,16 +1,42 @@
 import React, { Fragment } from "react";
 import { useEffect } from "react";
-import { useLoaderData,useFetcher,useNavigate } from "react-router-dom";
+import { useLoaderData,useFetcher,useNavigate,useLocation } from "react-router-dom";
 import axios from "axios";
 import Map from "../components/Map";
+import {ToastContainer, toast} from 'react-toastify'
+import Pagination from "../utils/pagination";
 const AllPlaces = () => {
   const data = useLoaderData();
   const fetcher = useFetcher();
   const navigate = useNavigate();
+  const location = useLocation()
   if (data.places.length === 0) {
     return <h2>No Place Found</h2>;
   }
   const editHandler = (id) => {};
+  useEffect(()=>{
+    const params = new URLSearchParams(location.search)
+    const toastMessage = params.get('toast')
+    if(toastMessage === 'place-added'){
+      toast.success("Place added successfully")
+        // Clean the URL
+    const cleanUrl = location.pathname;
+    navigate(cleanUrl, { replace: true });
+    }
+    if(toastMessage === 'logged-in'){
+      toast.success("You have loggedIn successfully")
+        // Clean the URL
+    const cleanUrl = location.pathname;
+    navigate(cleanUrl, { replace: true });
+    }
+   
+  },[location,navigate])
+
+  // Handle Pagination
+  // const setCurrentPage = async(page) =>{
+  //   const res = 
+  // }
+
 
   return (
     <div>
@@ -23,7 +49,9 @@ const AllPlaces = () => {
         data.places.map((place) => {
           return (
             <div key={place._id} className="place">
+              <div className="mb-10">
               <Map lat={place.location.lat} lng={place.location.lon} />
+              </div>
               <h2 className="place-title">{place.title}</h2>
               <p className="place-description">{place.description}</p>
               {/* <p>lat: {place.lat}</p>
@@ -35,10 +63,13 @@ const AllPlaces = () => {
                   <button className="btn-delete" type="submit">Delete</button>
                 </fetcher.Form>
               </div>
+
             </div>
           );
         })}
+        <Pagination  currentPage={data.currentPage} totalPages={data.totalPages} setCurrentPage={setCurrentPage} />
       </div>
+      <ToastContainer/>
     </div>
   );
 };

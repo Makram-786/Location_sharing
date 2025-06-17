@@ -1,8 +1,21 @@
-import React from 'react'
-import { Form,useFormAction,redirect, Link } from 'react-router-dom'
+import {useEffect} from 'react'
+import { Form,useFormAction,redirect, Link,useLocation,useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import {ToastContainer,toast} from 'react-toastify'
 const Login = () => {
     const result = useFormAction()
+    const navigate = useNavigate();
+    const location = useLocation()
+    useEffect(()=>{
+        const params = new URLSearchParams(location.search)
+        const toastMessage = params.get('toast')
+        if(toastMessage === 'logout'){
+          toast.success("You have logout successfully!")
+          // Clean the URL
+          const cleanUrl = location.pathname;
+          navigate(cleanUrl, { replace: true });
+        }
+      },[location,navigate])
   return (
     <div className='wrapper'>
         <Form method='post'>
@@ -23,7 +36,9 @@ const Login = () => {
                     Sign up
                 </Link>
             </p>
+            <ToastContainer/>
         </Form>
+        
     </div>
   )
 }
@@ -41,7 +56,8 @@ export async function loginFormAction({request}){
              password
          }, {withCredentials:true})
          window.localStorage.setItem('userId', JSON.stringify(res.data.userId))
-         return redirect('/')
+         toast('You have successfully logged in')
+         return redirect('/?toast=logged-in')
       
       
         

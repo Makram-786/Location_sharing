@@ -1,7 +1,7 @@
 // NewPlace.jsx
 import { Form, useActionData,redirect,useParams,useLoaderData } from "react-router-dom";
 import axios from "axios";
-import Map from "../components/Map";
+import {ToastContainer,toast} from 'react-toastify'
 
 export async function placeFormAction({ request }) {
   const formData = await request.formData();
@@ -15,7 +15,7 @@ export async function placeFormAction({ request }) {
       description,
       address,
     },{withCredentials:true});
-    return redirect('/')
+    return redirect("/?toast=place-added")
   } catch (error) {
     return { error: "Something went wrong" };
   }
@@ -57,18 +57,18 @@ const NewPlace = () => {
         <button type="submit">{!place ? "Add Place" : "Update Place"}</button>
       </div>
     </Form>
+      <ToastContainer/>
     </div>
   );
 };
 export const fetchPlace = async({params}) =>{
   try {
-   
       const res = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/api/places/${params.pid}`)
       return res.data.place
     }
 
    catch (error) {
-    throw error
+    return toast(error)
   }
 }
 
@@ -83,7 +83,7 @@ export async function updatePlaceFormAction({ request,params }) {
     },{withCredentials:true});
     return redirect('/')
   } catch (error) {
-    return { error: "Something went wrong" };
+    return toast(error)
   }
 }
 export default NewPlace;

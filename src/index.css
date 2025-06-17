@@ -13,6 +13,9 @@
 body{
     font-family: "Raleway", sans-serif;
 }
+.mb-10{
+    margin-bottom: 10px;
+}
 .wrapper{
          display: flex;
         justify-content: center;
