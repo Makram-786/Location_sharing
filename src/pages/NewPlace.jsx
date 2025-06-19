@@ -5,15 +5,16 @@ import {ToastContainer,toast} from 'react-toastify'
 
 export async function placeFormAction({ request }) {
   const formData = await request.formData();
-  const title = formData.get("title");
-  const description = formData.get("description");
-  const address = formData.get("address");
-
+  const sendFormData = new FormData()
+  sendFormData.append('title', formData.get("title"));
+  sendFormData.append('description', formData.get("description"))
+  sendFormData.append('address', formData.get("address"));
+  // Append multiple files
+  const files = formData.getAll("file"); // this will be a FileList
+  files.forEach((file) => sendFormData.append("file", file)); // same key "file"
   try {
     await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/api/places`, {
-      title,
-      description,
-      address,
+      sendFormData
     },{withCredentials:true});
     return redirect("/?toast=place-added")
   } catch (error) {
@@ -50,6 +51,10 @@ const NewPlace = () => {
         <label htmlFor="address">Address</label>
         <input type="text" name="address" id="address"   required />
       </div>}
+      <div className="form-group">
+        <label htmlFor="file">Upload Images</label>
+        <input type="file" name="file" id="file" />
+      </div>
        {/* {!place && 
        <Map/>
        } */}

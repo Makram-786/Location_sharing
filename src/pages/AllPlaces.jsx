@@ -37,7 +37,6 @@ const AllPlaces = () => {
   //   const res = 
   // }
 
-
   return (
     <div>
       {/* {success && <p style={{color:'green'}}>New Place has been created Successfully</p>} */}
@@ -67,7 +66,7 @@ const AllPlaces = () => {
             </div>
           );
         })}
-        <Pagination  currentPage={data.currentPage} totalPages={data.totalPages} setCurrentPage={setCurrentPage} />
+        <Pagination  currentPage={data.currentPage} totalPages={data.totalPages}  />
       </div>
       <ToastContainer/>
     </div>
@@ -89,5 +88,17 @@ export async function deletePlaceAction({ request }) {
   } catch (error) {
     return { error: "Failed to delete place" };
   }
+}
+
+export const fetchPlacesLoader =  async ({request}) => {
+  const url = new URL(request.url);
+  const page = url.searchParams.get("page");
+  console.log(page,"==================Page Number=================")
+  const userId = JSON.parse(localStorage.getItem("userId"));
+  if (!userId) throw new Error("Not logged in");
+  const res = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/api/places/user/${userId}?page=${page}`, {
+    withCredentials: true,
+  });
+  return res.data;
 }
 

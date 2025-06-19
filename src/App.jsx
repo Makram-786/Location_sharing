@@ -1,7 +1,7 @@
 import { createBrowserRouter,RouterProvider,Route,Link } from "react-router-dom";
 import { createRoot } from "react-dom";
 import NewPlace, { fetchPlace, placeFormAction, updatePlaceFormAction } from "./pages/NewPlace";
-import AllPlaces, { deletePlaceAction } from "./pages/AllPlaces";
+import AllPlaces, { deletePlaceAction, fetchPlacesLoader } from "./pages/AllPlaces";
 import axios from 'axios'
 import ErrorPage from "./pages/ErrorPage";
 import Login, { loginFormAction } from "./pages/Login";
@@ -21,14 +21,7 @@ function App() {
             {
               path: "/",
               element: <AllPlaces />,
-              loader: async () => {
-                const userId = JSON.parse(localStorage.getItem("userId"));
-                if (!userId) throw new Error("Not logged in");
-                const res = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/api/places/user/${userId}`, {
-                  withCredentials: true,
-                });
-                return res.data;
-              },
+              loader:fetchPlacesLoader,
               action:deletePlaceAction,
               errorElement: <ErrorPage />,
             },

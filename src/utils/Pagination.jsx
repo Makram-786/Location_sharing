@@ -1,7 +1,7 @@
-import React from 'react'
+import {useNavigate} from 'react-router-dom'
 
-const Pagination = ({totalPages,currentPage,setCurrentPage}) => {
-   
+const Pagination = ({totalPages,currentPage}) => {
+   const navigate = useNavigate()
     
   return (
     <div>
@@ -10,7 +10,7 @@ const Pagination = ({totalPages,currentPage,setCurrentPage}) => {
     return (
       <button
         key={page}
-        onClick={() => setCurrentPage(page)}
+        onClick={() => navigate(`/?page=${page}`)}
         className={page === currentPage ? 'active' : ''}
       >
         {page}
