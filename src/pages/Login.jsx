@@ -15,6 +15,12 @@ const Login = () => {
           const cleanUrl = location.pathname;
           navigate(cleanUrl, { replace: true });
         }
+        if(toastMessage === 'not-loggedIn'){
+            toast.error('No account exists related to this email!')
+            // Clean the URL
+            const cleanUrl = location.pathname;
+            navigate(cleanUrl, { replace: true });
+          }
       },[location,navigate])
   return (
     <div className='wrapper'>
@@ -62,7 +68,9 @@ export async function loginFormAction({request}){
       
         
     } catch (error) {
-        return {error:true}
+        toast(error);
+        return redirect('/login/?toast=not-loggedIn')
+       
     }
 
 }

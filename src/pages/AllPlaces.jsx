@@ -1,16 +1,16 @@
 import React, { Fragment } from "react";
 import { useEffect } from "react";
-import { useLoaderData,useFetcher,useNavigate,useLocation } from "react-router-dom";
+import { useLoaderData,useFetcher,useNavigate,useLocation,redirect } from "react-router-dom";
 import axios from "axios";
 import Map from "../components/Map";
 import {ToastContainer, toast} from 'react-toastify'
 import Pagination from "../utils/pagination";
 const AllPlaces = () => {
-  const data = useLoaderData();
+  const places = useLoaderData();
   const fetcher = useFetcher();
   const navigate = useNavigate();
   const location = useLocation()
-  if (data.places.length === 0) {
+  if (places.length === 0) {
     return <h2>No Place Found</h2>;
   }
   const editHandler = (id) => {};
@@ -44,15 +44,19 @@ const AllPlaces = () => {
       <h1 className="place-heading">All <span> Places</span></h1>
       </div>
       <div className="place-list">
-      {data &&
-        data.places.map((place) => {
+      {places &&
+        places.map((place) => {
           return (
             <div key={place._id} className="place">
               <div className="mb-10">
               <Map lat={place.location.lat} lng={place.location.lon} />
               </div>
+             
               <h2 className="place-title">{place.title}</h2>
               <p className="place-description">{place.description}</p>
+              <div className="place-images">
+                {place.images.map(((image,index)=> <img src={image} alt={`image-${index}`} />))}
+              </div>
               {/* <p>lat: {place.lat}</p>
               <p>lng : {place.lon}</p> */}
               <div className="btn-action">
@@ -66,8 +70,8 @@ const AllPlaces = () => {
             </div>
           );
         })}
-        <Pagination  currentPage={data.currentPage} totalPages={data.totalPages}  />
       </div>
+        <Pagination  currentPage={places.currentPage} totalPages={places.totalPages}  />
       <ToastContainer/>
     </div>
   );
@@ -83,7 +87,7 @@ export async function deletePlaceAction({ request }) {
     await axios.delete(`${import.meta.env.VITE_APP_BACKEND_URL}/api/places/${placeId}`, {
       withCredentials: true,
     });
-
+    toast.success('Place Deleted Successfully')
     return null; // Let useFetcher revalidate
   } catch (error) {
     return { error: "Failed to delete place" };
@@ -92,13 +96,16 @@ export async function deletePlaceAction({ request }) {
 
 export const fetchPlacesLoader =  async ({request}) => {
   const url = new URL(request.url);
-  const page = url.searchParams.get("page");
-  console.log(page,"==================Page Number=================")
+  const page = url.searchParams.get("page") || 1;
   const userId = JSON.parse(localStorage.getItem("userId"));
   if (!userId) throw new Error("Not logged in");
   const res = await axios.get(`${import.meta.env.VITE_APP_BACKEND_URL}/api/places/user/${userId}?page=${page}`, {
     withCredentials: true,
   });
-  return res.data;
+  const {places,totalPages} = res.data;
+  if(places.length === 0 && page > 1){
+    return redirect(`/?page=${page - 1}`)
+  }
+  return places
 }
 

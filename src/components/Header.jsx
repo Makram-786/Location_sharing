@@ -8,7 +8,6 @@ const Header = () => {
         try{
           const res = await axios.post(`${import.meta.env.VITE_APP_BACKEND_URL}/api/user/logout`,{},{withCredentials:true})
           window.localStorage.removeItem('userId')
-          console.log(res.data.message)
           return navigate('/login?toast=logout')
         }catch(error){
           throw error

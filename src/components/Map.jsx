@@ -12,7 +12,6 @@ L.Icon.Default.mergeOptions({
 
 const Map = ({ lat, lng }) => {
   const position = [lat, lng]; // Coordinates from backend
-  console.log(lat, lng)
   return (
     <MapContainer center={position} zoom={13} style={{ height: "400px", width: "100%" }}>
       <TileLayer
